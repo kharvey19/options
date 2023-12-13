@@ -1,18 +1,18 @@
 
 # Options Framework for the Four-Rooms Domain
 
-<div style="display: flex; justify-content: space-between;">
+<p align="center">
     <img src="https://github.com/TristanBester/options/blob/main/results/options_clip.gif" alt="Your GIF"/>
-</div>
+</p>
 
 ## Ovierview
 - This repository contains the code used to train and evaluate the options framework on the four-rooms domain. The options framework is a hierarchical reinforcement learning framework that allows agents to learn temporally extended actions, called options, in addition to primitive actions. 
 - The agent is trained and evaluated on the four-rooms domain. The four-rooms domain is a simple grid-world environment that consists of four rooms connected by narrow corridors. The agent is tasked with navigating to a goal location in the environment. The agent is provided with a set of primitive actions that allow it to move in the four cardinal directions.
 - The agent is also provided with a set of options that allow it to move to the goal location in each of the four rooms. The agent is rewarded for reaching the goal location.
 
-<div style="display: flex; justify-content: space-between;">
+<p align="center">
     <img src="https://github.com/TristanBester/options/blob/main/results/results.png" alt="Your GIF" width="500" />
-</div>
+</p>
 
 ## Prerequisites
 - Python: 3.11+
