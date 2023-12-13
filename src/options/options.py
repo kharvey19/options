@@ -344,10 +344,10 @@ def create_room_four_option_one() -> Option:
 
     # fmt: off
     policy = {
-        (8, 7): RIGHT, (8, 8):  RIGHT, (8, 9):  UP, (8, 10):  LEFT, (8, 12): LEFT,
-        (9, 7): UP,    (9, 8):  UP,    (9, 9):  UP, (9, 10):  UP,   (9, 12):  UP,
-        (10, 7): UP,   (10, 8): UP,    (10, 9): UP, (10, 10): UP,   (10, 12): UP,
-        (11, 7): UP,   (11, 8): UP,    (11, 9): UP, (11, 10): UP,   (11, 12): UP,
+        (8, 7): RIGHT, (8, 8):  RIGHT, (8, 9):  UP, (8, 10):  LEFT, (8, 11): LEFT,
+        (9, 7): UP,    (9, 8):  UP,    (9, 9):  UP, (9, 10):  UP,   (9, 11):  UP,
+        (10, 7): UP,   (10, 8): UP,    (10, 9): UP, (10, 10): UP,   (10, 11): UP,
+        (11, 7): UP,   (11, 8): UP,    (11, 9): UP, (11, 10): UP,   (11, 11): UP,
         (10, 6): RIGHT
     }
     # fmt: on
@@ -381,10 +381,10 @@ def create_room_four_option_two() -> Option:
 
     # fmt: off
     policy = {
-        (8, 7): DOWN,  (8, 8):  LEFT, (8, 9):  LEFT, (8, 10):  LEFT, (8, 12): LEFT,
-        (9, 7): DOWN,  (9, 8):  LEFT, (9, 9):  LEFT, (9, 10):  LEFT, (9, 12):  LEFT,
-        (10, 7): LEFT, (10, 8): LEFT, (10, 9): LEFT, (10, 10): LEFT, (10, 12): LEFT,
-        (11, 7): UP,   (11, 8): LEFT, (11, 9): LEFT, (11, 10): LEFT, (11, 12): LEFT,
+        (8, 7): DOWN,  (8, 8):  LEFT, (8, 9):  LEFT, (8, 10):  LEFT, (8, 11): LEFT,
+        (9, 7): DOWN,  (9, 8):  LEFT, (9, 9):  LEFT, (9, 10):  LEFT, (9, 11):  LEFT,
+        (10, 7): LEFT, (10, 8): LEFT, (10, 9): LEFT, (10, 10): LEFT, (10, 11): LEFT,
+        (11, 7): UP,   (11, 8): LEFT, (11, 9): LEFT, (11, 10): LEFT, (11, 11): LEFT,
         (7, 9): DOWN
     }
     # fmt: on

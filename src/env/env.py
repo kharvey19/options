@@ -35,7 +35,7 @@ class FourRooms(gym.Env[tuple[int, int], np.int32]):
         super().__init__(**kwargs)
         self.observation_space = gym.spaces.MultiDiscrete((13, 13))
         self.action_space = gym.spaces.Discrete(4)
-        self.max_steps = 10000
+        self.max_steps = 100
         self.agent_state = (0, 0)
         self.goal_state = (0, 0)
         self.step_count = 0
@@ -46,7 +46,7 @@ class FourRooms(gym.Env[tuple[int, int], np.int32]):
         seed: int | None = None,
         options: dict[str, any] | None = None,
     ) -> tuple[tuple[int, int], dict[any, any]]:
-        self.agent_state = (7, 9)
+        self.agent_state = (5, 2)
         self.goal_state = (9, 9)
         self.step_count = 0
 

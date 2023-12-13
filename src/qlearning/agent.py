@@ -1,11 +1,21 @@
+import gymnasium as gym
 import numpy as np
 from tqdm import trange
 
-from src.env.env import FourRooms
 
+def train_qlearning(
+    env: gym.Env[tuple[int, int], int], n_episodes: int
+) -> np.ndarray[np.float64]:
+    """
+    Trains a Q-learning agent on the given environment.
 
-def train_qlearning():
-    env = FourRooms()
+    Args:
+        env (gym.Env): The environment to train the agent on.
+        n_episodes (int): The number of episodes to train for.
+
+    Returns:
+        np.ndarray[np.float64]: An array containing the rewards obtained in each episode.
+    """
     Q = np.zeros(
         (
             env.observation_space.nvec[0],
@@ -15,10 +25,11 @@ def train_qlearning():
     )
 
     rewards = []
-    pbar = trange(50000)
+    pbar = trange(n_episodes)
     for episode in pbar:
         obs, _ = env.reset()
         done = False
+        reward = 0
 
         while not done:
             if np.random.random() < 0.1:
