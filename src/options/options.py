@@ -1,8 +1,5 @@
 from itertools import product
 
-import numpy as np
-from env.env import FourRooms
-
 RIGHT = 0
 LEFT = 1
 UP = 2
@@ -10,21 +7,38 @@ DOWN = 3
 
 
 class Option:
+    """Option class represents an option in a reinforcement learning setting.
+
+    An option is a temporally extended action that can be taken by an agent.
+    It consists of an initiation set, a policy, and a termination set.
+    The initiation set specifies the states in which the option can be initiated.
+    The policy maps states to actions, determining the action to take in each state.
+    The termination set specifies the states in which the option can be terminated.
+
+    Attributes:
+        initiation_set (list[tuple[int, int]]): The set of states in
+            which the option can be initiated.
+        policy (dict[tuple[int, int], int]): The policy mapping
+            states to actions.
+        termination_set (list[tuple[int, int]]): The set of states in
+            which the option can be terminated.
+    """
+
     def __init__(
         self,
-        initiation_set: list,
-        policy: dict,
-        termination_set: list,
-    ):
+        initiation_set: list[tuple[int, int]],
+        policy: dict[tuple[int, int], int],
+        termination_set: list[tuple[int, int]],
+    ) -> None:
         self.initiation_set = initiation_set
         self.policy = policy
         self.termination_set = termination_set
 
-    def is_available(self, obs):
+    def is_available(self, obs: tuple[int, int]) -> bool:
         """Return if the option is availble to be taken in the given state."""
         return obs in self.initiation_set
 
-    def is_terminated(self, obs):
+    def is_terminated(self, obs: tuple[int, int]) -> bool:
         """Return if the option is terminated in the given state.
 
         In this case, the option is terminated if the state is in the termination set.
@@ -33,25 +47,48 @@ class Option:
         """
         return obs in self.termination_set
 
-    def select_action(self, obs: np.array):
+    def select_action(self, obs: tuple[int, int]) -> int:
+        """Return the action to take in the given state."""
         return self.policy[obs]
 
 
 class PrimitiveOption:
+    """
+    Represents a primitive option in an options framework.
+
+    Args:
+        action (int): The action associated with the option.
+
+    Attributes:
+        action (int): The action associated with the option.
+    """
+
     def __init__(self, action: int):
         self.action = action
 
-    def is_available(self, obs):
+    def is_available(self, obs: tuple[int, int]) -> bool:
+        """Checks if the option is available in the given observation."""
         return True
 
-    def is_terminated(self, obs):
+    def is_terminated(self, obs: tuple[int, int]) -> bool:
+        """Checks if the option is terminated in the given observation."""
         return True
 
-    def select_action(self, obs):
+    def select_action(self, obs: tuple[int, int]) -> int:
+        """Selects the action for the option based on the given observation."""
         return self.action
 
 
-def create_room_one_option_one():
+def create_room_one_option_one() -> Option:
+    """
+    Create option one for room one.
+
+    This function creates an option for navigating through room one. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
@@ -81,7 +118,16 @@ def create_room_one_option_one():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_one_option_two():
+def create_room_one_option_two() -> Option:
+    """
+    Create option two for room one.
+
+    This function creates an option for navigating through room one. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
@@ -111,7 +157,16 @@ def create_room_one_option_two():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_two_option_one():
+def create_room_two_option_one() -> Option:
+    """
+    Create option one for room two.
+
+    This function creates an option for navigating through room two. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (1, 7), (1, 8), (1, 9), (1, 10), (1, 11),
@@ -143,7 +198,16 @@ def create_room_two_option_one():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_two_option_two():
+def create_room_two_option_two() -> Option:
+    """
+    Create option two for room two.
+
+    This function creates an option for navigating through room two. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (1, 7), (1, 8), (1, 9), (1, 10), (1, 11),
@@ -175,7 +239,16 @@ def create_room_two_option_two():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_three_option_one():
+def create_room_three_option_one() -> Option:
+    """
+    Create option one for room three.
+
+    This function creates an option for navigating through room three. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (7, 1), (7, 2), (7, 3), (7, 4), (7, 5),
@@ -205,7 +278,16 @@ def create_room_three_option_one():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_three_option_two():
+def create_room_three_option_two() -> Option:
+    """
+    Create option two for room three.
+
+    This function creates an option for navigating through room three. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (7, 1), (7, 2), (7, 3), (7, 4), (7, 5),
@@ -235,7 +317,16 @@ def create_room_three_option_two():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_four_option_one():
+def create_room_four_option_one() -> Option:
+    """
+    Create option one for room four.
+
+    This function creates an option for navigating through room four. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (8, 7), (8, 8), (8, 9), (8, 10), (8, 11),
@@ -263,7 +354,16 @@ def create_room_four_option_one():
     return Option(initiation_set, policy, termination_set)
 
 
-def create_room_four_option_two():
+def create_room_four_option_two() -> Option:
+    """
+    Create option two for room four.
+
+    This function creates an option for navigating through room four. It defines the initiation set,
+    termination set, and policy for the option.
+
+    Returns:
+        Option: The created option object.
+    """
     # fmt: off
     initiation_set =[
         (8, 7), (8, 8), (8, 9), (8, 10), (8, 11),
@@ -289,20 +389,3 @@ def create_room_four_option_two():
     }
     # fmt: on
     return Option(initiation_set, policy, termination_set)
-
-
-if __name__ == "__main__":
-    env = FourRooms()
-    option = create_room_four_option_two()
-    obs, _ = env.reset()
-    env.render()
-
-    while not option.is_terminated(obs):
-        print(obs)
-        obs, _, _, _, _ = env.step(option.select_action(obs))
-        env.render()
-        input("Press enter to continue: ")
-
-    print(option.is_terminated(obs))
-    print(obs)
-    env.render()
