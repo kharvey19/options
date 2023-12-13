@@ -14,6 +14,39 @@ matplotlib = "^3.8.2"
 gymnasium = "^0.29.1"
 termcolor = "^2.4.0"
 
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.pylint.MASTER]
+disable=["C0114", "R0903"]
+
+[tool.pyright]
+include = ["src"]
+exclude = [
+    "**/__pycache__",
+]
+typeCheckingMode = "strict"
+reportMissingImports = true
+reportUnknownParameterType = false
+reportMissingParameterType = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportMissingTypeStubs = false
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
+
+[tool.isort]
+profile = "black"
+py_version=311
+line_length=88
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.1"
+pylint = "^3.0.3"
+pylance = "^0.8.20"
+pyright = "^1.1.340"
 
 [build-system]
 requires = ["poetry-core"]
