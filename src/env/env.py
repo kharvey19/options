@@ -13,10 +13,10 @@ class FourRooms(gym.Env):
         super().__init__()
         self.observation_space = gym.spaces.MultiDiscrete((13, 13))
         self.action_space = gym.spaces.Discrete(4)
-        self.max_steps = 1000
+        self.max_steps = 10000
 
     def reset(self, seed=None):
-        self.agent_state = (1, 1)
+        self.agent_state = (7, 9)
         self.goal_state = (9, 9)
         self.step_count = 0
 

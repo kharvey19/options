@@ -31,7 +31,9 @@ def train_qlearning():
             if done:
                 Q[obs][action] += 0.01 * (reward - Q[obs][action])
             else:
-                Q[obs][action] += 0.01 * (reward + np.max(Q[next_obs]) - Q[obs][action])
+                Q[obs][action] += 0.01 * (
+                    reward + 0.99 * np.max(Q[next_obs]) - Q[obs][action]
+                )
             obs = next_obs
         rewards.append(reward)
 
