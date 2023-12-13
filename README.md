@@ -25,8 +25,8 @@ curl -sSL https://install.python-poetry.org | python3 -
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/ur10-pybullet-control.git
-cd ur10-pybullet-control
+git clone https://github.com/TristanBester/options.git
+cd options
 ``` 
 
 Install dependencies:
