@@ -19,7 +19,7 @@ line-length = 88
 target-version = ['py311']
 
 [tool.pylint.MASTER]
-disable=["C0114", "R0903", "C0103", "R0914", "W0613"]
+disable=["C0114", "R0903", "C0103", "R0914", "W0613", "w0221"]
 
 [tool.pyright]
 include = ["src"]
@@ -33,6 +33,7 @@ reportUnknownMemberType=false
 reportUnknownArgumentType=false 
 reportUnknownParameterType=false
 reportGeneralTypeIssues=false
+reportIncompatibleMethodOverride=false
 pythonVersion = "3.11"
 pythonPlatform = "Linux"
 
