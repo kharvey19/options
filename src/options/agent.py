@@ -21,7 +21,7 @@ from .options import (
 def train_options(
     env: gym.Env[np.ndarray[np.float64], int],
     n_episodes: int,
-) -> np.ndarray[np.float64]:
+) -> tuple[np.ndarray, np.ndarray]:
     """Train options for the FourRooms environment."""
     options = _load_options(env)
     Q = np.zeros(
@@ -33,11 +33,13 @@ def train_options(
     )
 
     rewards = []
+    steps = []
     pbar = trange(n_episodes)
     for episode in pbar:
         obs, _ = env.reset()
         done = False
         episode_return = 0
+        episode_steps = 0
 
         while not done:
             option, option_idx = _get_option(obs, options, Q)
@@ -58,13 +60,15 @@ def train_options(
                 )
             obs = final_obs
             episode_return += option_return
+            episode_steps += option_steps
         rewards.append(episode_return)
+        steps.append(episode_steps)
 
         if episode % 100 == 0:
             pbar.set_description(
-                f"Episode {episode} | Reward {np.mean(rewards[-100:])}"
+                f"Episode {episode} | Reward {np.mean(rewards[-100:])} | Steps {np.mean(steps[-100:]):.1f}"
             )
-    return np.array(rewards)
+    return np.array(rewards), np.array(steps)
 
 
 def _load_options(
