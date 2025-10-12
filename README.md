@@ -295,19 +295,7 @@ python tests/plot_mixed_comparison.py
 
 ## References
 
-### Foundational Papers
-
-- **Sutton, R. S., Precup, D., & Singh, S. (1999).** Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning. *Artificial Intelligence*, 112(1-2), 181-211.
-
-### Option Discovery
-
-(Will add soon)
-
-### Planning with Options
-
-(Will add soon)
-
----
+**Sutton, R. S., Precup, D., & Singh, S. (1999).** Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning. *Artificial Intelligence*, 112(1-2), 181-211.
 
 ## Acknowledgments
 
