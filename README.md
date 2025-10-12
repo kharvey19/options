@@ -13,17 +13,11 @@ This repository implements and compares multiple approaches to **hierarchical re
 
 The project includes:
 
-- 🎯 **Q-Learning Baseline** - Standard tabular Q-learning with primitive actions
-- 🚀 **Hard-coded Options** - Pre-defined hallway options for room navigation
-- 🧠 **Option Discovery** - Automatic option learning via intrinsic motivation
-- 📊 **Planning with Options** - SMDP value iteration demonstrating planning efficiency
-- 📈 **Comprehensive Analysis** - Visualizations comparing all approaches
-
-<p align="center">
-    <img src="https://github.com/TristanBester/options/blob/main/results/results.png" alt="Training Results" width="500" />
-</p>
-
----
+- **Q-Learning Baseline**: Standard tabular Q-learning with primitive actions
+- **Hard-coded Options**: Pre-defined hallway options for room navigation
+- **Option Discovery**: Automatic option learning via intrinsic motivation
+- **Planning with Options**: SMDP value iteration demonstrating planning efficiency
+- **Comprehensive Analysis**: Visualizations comparing all approaches
 
 ## Table of Contents
 
@@ -38,8 +32,6 @@ The project includes:
 - [Usage](#usage)
 - [Results](#results)
 - [References](#references)
-
----
 
 ## Installation
 
@@ -70,8 +62,6 @@ Or using pip:
 ```bash
 pip install -r requirements.txt
 ```
-
----
 
 ## Project Structure
 
@@ -260,16 +250,15 @@ python tests/plot_mixed_comparison.py
 
 ## Results
 
-### Learning Performance
+### Primitive vs Hardcoded Options
 
 <p align="center">
     <img src="plots/hard_coded_options_results.png" alt="Training comparison" width="600"/>
 </p>
 
 **Key findings:**
-- Hard-coded options learn **~2x faster** than Q-learning baseline
-- Discovery approaches baseline performance but requires more exploration
-- Options reduce credit assignment problem across rooms
+- Hard-coded options reach the goal almost immediatly
+- Primitive actions take much longer to converge
 
 ### Planning Efficiency
 
@@ -278,9 +267,7 @@ python tests/plot_mixed_comparison.py
 </p>
 
 **Key findings:**
-- Options converge in **3-5x fewer iterations**
-- Better **value propagation** per computational step
-- **Mixed planning** (primitives + options) combines benefits of both
+- Mixed planning converges faster and has better value propagation per computational step
 
 ### Value Evolution
 
@@ -289,7 +276,7 @@ python tests/plot_mixed_comparison.py
 </p>
 
 **Key findings:**
-- Start state value improves **much faster** with options
+- Start state value improves much faster with options
 - Options discover useful behavior earlier
 - Demonstrates efficiency of temporal abstraction
 
@@ -300,6 +287,4 @@ python tests/plot_mixed_comparison.py
 ## Acknowledgments
 
 This repository is forked from [TristanBester/options](https://github.com/TristanBester/options), which provided the foundation for the Q-learning baseline and hard-coded options implementation. Additional modules for option discovery and planning with SMDP value iteration have been added to this fork.
-
-This implementation is inspired by the seminal work on options framework by Sutton, Precup, and Singh, and the intrinsic motivation work by Singh, Barto, and Chentanez.
 
