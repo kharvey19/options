@@ -1,0 +1,10 @@
+# Core dependencies for options project
+numpy>=1.26.2
+tqdm>=4.66.1
+matplotlib>=3.8.2
+gymnasium>=0.29.1
+termcolor>=2.4.0
+
+# Code formatting (optional but recommended)
+black>=23.12.0
+
