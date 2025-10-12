@@ -293,18 +293,6 @@ python tests/plot_mixed_comparison.py
 - Options discover useful behavior earlier
 - Demonstrates efficiency of temporal abstraction
 
----
-
-## Key Insights
-
-1. **Temporal Abstraction Works**: Options dramatically improve both learning and planning
-2. **Structure Matters**: Hard-coded options outperform discovery (given domain knowledge)
-3. **Discovery is Scalable**: Automatic discovery removes need for manual design
-4. **SMDP Math is Crucial**: Proper discounting with fundamental matrix is essential
-5. **Mixed is Best**: Combining primitives + options gets benefits of both
-
----
-
 ## References
 
 ### Foundational Papers
