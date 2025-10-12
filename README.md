@@ -27,145 +27,17 @@ The project includes:
 
 ## Table of Contents
 
+- [Installation](#installation)
+- [Project Structure](#project-structure)
 - [Environment](#environment)
 - [Approaches](#approaches)
   - [1. Q-Learning Baseline](#1-q-learning-baseline)
   - [2. Hard-coded Hallway Options](#2-hard-coded-hallway-options)
   - [3. Option Discovery](#3-option-discovery)
   - [4. Planning with Options](#4-planning-with-options)
-- [Installation](#installation)
 - [Usage](#usage)
-- [Project Structure](#project-structure)
 - [Results](#results)
 - [References](#references)
-
----
-
-## Environment
-
-**Four-Rooms Gridworld** - A 13×13 grid divided into four rooms connected by narrow hallways:
-
-```
-█████████████
-█     █     █
-█  1  ┃  2  █
-█     █     █
-█━━┃██┃█━━━━█
-█  3  █  4  █
-█     ┃     █
-█████████████
-```
-
-**Properties:**
-- **Hallway positions**: (3,6), (6,2), (7,9), (10,6)
-- **Stochastic transitions**: 2/3 intended direction, 1/9 each for other three
-- **Episodic task**: Navigate to a goal location
-- **Reward**: +1 for reaching goal, 0 otherwise
-- **Discount factor**: $\gamma = 0.99$
-
-**Challenge**: Rooms create natural bottlenecks, making navigation difficult with primitive actions alone.
-
----
-
-## Approaches
-
-### 1. Q-Learning Baseline
-
-**Location**: `src/qlearning/`
-
-Standard tabular Q-learning with primitive actions (UP, DOWN, LEFT, RIGHT):
-
-$$Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
-
-- **Pros**: Simple, model-free, guaranteed convergence
-- **Cons**: Slow learning across rooms, credit assignment problem
-- **Use case**: Baseline for comparison
-
-### 2. Hard-coded Hallway Options
-
-**Location**: `src/options/`
-
-Eight pre-defined options for room-to-hallway navigation:
-
-| Option | Initiation | Target | Description |
-|--------|-----------|--------|-------------|
-| Room1→Right | Room 1 | (3,6) | Navigate to right hallway |
-| Room1→Bottom | Room 1 | (6,2) | Navigate to bottom hallway |
-| Room2→Left | Room 2 | (3,6) | Navigate to left hallway |
-| Room2→Bottom | Room 2 | (7,9) | Navigate to bottom hallway |
-| Room3→Top | Room 3 | (6,2) | Navigate to top hallway |
-| Room3→Right | Room 3 | (10,6) | Navigate to right hallway |
-| Room4→Top | Room 4 | (7,9) | Navigate to top hallway |
-| Room4→Left | Room 4 | (10,6) | Navigate to left hallway |
-
-**Key features:**
-- **Shortest-path policies** within each room
-- **Restricted initiation sets** (room-specific)
-- **Automatic termination** at target hallway
-- **Intra-option learning** for efficient updates
-
-**Learning**:
-
-$$Q(s,o) \leftarrow Q(s,o) + \alpha[r + \gamma^k V(s') - Q(s,o)]$$
-
-where $k$ is the option duration.
-
-- **Pros**: Fast learning, temporal abstraction, exploits domain structure
-- **Cons**: Requires manual design, not scalable
-- **Use case**: Demonstrating benefits of good abstractions
-
-### 3. Option Discovery
-
-**Location**: `src/discovery/`
-
-Automatic option discovery using **intrinsic motivation**:
-
-**Algorithm**:
-1. **Detect salient events**: Doorway crossings, novel states
-2. **Spawn options**: Create new option targeting that event
-3. **Learn policies**: Q-learning with intrinsic + extrinsic rewards
-4. **Prediction learning**: Track event predictability
-5. **Intrinsic decay**: As prediction improves, intrinsic reward decreases
-
-**Intrinsic Reward**:
-
-$$r_{\text{intrinsic}} = \text{scale} \times |\text{actual\_event} - \text{predicted\_event}|$$
-
-**Intra-option learning**: Updates all consistent options simultaneously
-
-- **Pros**: Automatic, no domain knowledge required, adaptive
-- **Cons**: Slower than hard-coded, requires tuning, exploration overhead
-- **Use case**: Scalable HRL without manual design
-
-### 4. Planning with Options
-
-**Location**: `src/planning/`
-
-**Synchronous Value Iteration** with proper SMDP backups using the **fundamental matrix approach**:
-
-**SMDP Bellman Equation**:
-
-$$V(s) = \max_{o \in \mathcal{O}(s)} \left[ r_o(s) + \sum_{s'} p_{ss'}^o V(s') \right]$$
-
-Where:
-- $r_o(s) = \mathbb{E}\left[\sum_{t=0}^{\tau-1} \gamma^t r_t \mid s,o\right]$ (expected discounted reward)
-- $p_{ss'}^o = \mathbb{E}\left[\gamma^\tau \mathbb{1}(s_\tau=s') \mid s,o\right]$ (expected discounted termination)
-- $\tau$ = random option duration
-
-**Fundamental Matrix**:
-
-$$N = (I - \gamma P_{II})^{-1} = \sum_{k=0}^{\infty} \gamma^k P_{II}^k$$
-
-Enables efficient computation:
-- Rewards: $r_o(s) = N \cdot r_I$
-- Termination: $p_{ss'}^o = \gamma \cdot N \cdot P_{IB}$
-
-**Key results**:
-- ✅ **3-5x fewer iterations** to converge vs primitives
-- ✅ **Better value propagation** per computational step
-- ✅ **Faster discovery** of useful behavior
-
-See `src/planning/README.md` for detailed explanation.
 
 ---
 
@@ -198,6 +70,129 @@ Or using pip:
 ```bash
 pip install -r requirements.txt
 ```
+
+---
+
+## Project Structure
+
+```
+options/
+├── src/
+│   ├── env/
+│   │   └── env.py                    # Four-Rooms environment
+│   ├── qlearning/
+│   │   └── agent.py                  # Q-learning baseline
+│   ├── options/
+│   │   ├── agent.py                  # Hard-coded options training
+│   │   └── options.py                # Option classes
+│   ├── discovery/
+│   │   ├── agent.py                  # Discovery training loop
+│   │   ├── discovered_option.py      # Learned option class
+│   │   ├── option_discovery.py       # Discovery manager
+│   │   └── README.md                 # Discovery documentation
+│   ├── planning/
+│   │   ├── svi_planner.py           # SMDP value iteration
+│   │   ├── hallway_options.py       # Hallway option definitions
+│   │   └── README.md                # Planning documentation
+│   └── main.py                       # Main entry point
+├── tests/
+│   ├── test_smdp_backup.py          # SMDP correctness tests
+│   ├── plot_efficiency_metrics.py    # Planning visualizations
+│   └── plot_mixed_comparison.py      # Mixed planning comparison
+├── plots/                            # Generated visualizations
+├── results/                          # Training results
+├── pyproject.toml                    # Poetry configuration
+├── requirements.txt                  # Pip requirements
+└── README.md                         # This file
+```
+
+---
+
+## Environment
+
+**Four-Rooms Gridworld** - A 13×13 grid divided into four rooms connected by hallways.
+
+**Properties:**
+- **Hallway positions**: (3,6), (6,2), (7,9), (10,6)
+- **Stochastic transitions**: 2/3 intended direction, 1/9 each for other three
+- **Episodic task**: Navigate to a goal location
+- **Reward**: +1 for reaching goal, 0 otherwise
+- **Discount factor**: $\gamma = 0.99$
+
+## Approaches
+
+### 1. Q-Learning Baseline
+
+**Location**: `src/qlearning/`
+
+Standard tabular Q-learning with primitive actions (UP, DOWN, LEFT, RIGHT):
+
+$$Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
+
+### 2. Hard-coded Hallway Options
+
+**Location**: `src/options/`
+
+Eight pre-defined options for room-to-hallway navigation:
+
+| Option | Initiation | Target | Description |
+|--------|-----------|--------|-------------|
+| Room1→Right | Room 1 | (3,6) | Navigate to right hallway |
+| Room1→Bottom | Room 1 | (6,2) | Navigate to bottom hallway |
+| Room2→Left | Room 2 | (3,6) | Navigate to left hallway |
+| Room2→Bottom | Room 2 | (7,9) | Navigate to bottom hallway |
+| Room3→Top | Room 3 | (6,2) | Navigate to top hallway |
+| Room3→Right | Room 3 | (10,6) | Navigate to right hallway |
+| Room4→Top | Room 4 | (7,9) | Navigate to top hallway |
+| Room4→Left | Room 4 | (10,6) | Navigate to left hallway |
+
+**Learning**:
+
+$$Q(s,o) \leftarrow Q(s,o) + \alpha[r + \gamma^k V(s') - Q(s,o)]$$
+
+where $k$ is the option duration.
+
+### 3. Option Discovery
+
+**Location**: `src/discovery/`
+
+Automatic option discovery using **intrinsic motivation**:
+
+**Algorithm**:
+1. **Detect salient events**: Doorway crossings, novel states
+2. **Spawn options**: Create new option targeting that event
+3. **Learn policies**: Q-learning with intrinsic + extrinsic rewards
+4. **Prediction learning**: Track event predictability
+5. **Intrinsic decay**: As prediction improves, intrinsic reward decreases
+
+**Intrinsic Reward**:
+
+$$r_{\text{intrinsic}} = \text{scale} \times |\text{actual\\_event} - \text{predicted\\_event}|$$
+
+**Intra-option learning**: Updates all consistent options simultaneously
+
+### 4. Planning with Options
+
+**Location**: `src/planning/`
+
+**Synchronous Value Iteration** with proper SMDP backups using the **fundamental matrix approach**:
+
+**SMDP Bellman Equation**:
+
+$$V(s) = \max_{o \in \mathcal{O}(s)} \left[ r_o(s) + \sum_{s'} p_{ss'}^o V(s') \right]$$
+
+Where:
+- $r_o(s) = \mathbb{E}\left[\sum_{t=0}^{\tau-1} \gamma^t r_t \mid s,o\right]$ (expected discounted reward)
+- $p_{ss'}^o = \mathbb{E}\left[\gamma^\tau \mathbb{1}(s_\tau=s') \mid s,o\right]$ (expected discounted termination)
+- $\tau$ = random option duration
+
+**Fundamental Matrix**:
+
+$$N = (I - \gamma P_{II})^{-1} = \sum_{k=0}^{\infty} \gamma^k P_{II}^k$$
+
+Enables efficient computation:
+- Rewards: $r_o(s) = N \cdot r_I$
+- Termination: $p_{ss'}^o = \gamma \cdot N \cdot P_{IB}$
 
 ---
 
@@ -263,39 +258,6 @@ python tests/plot_mixed_comparison.py
 
 ---
 
-## Project Structure
-
-```
-options/
-├── src/
-│   ├── env/
-│   │   └── env.py                    # Four-Rooms environment
-│   ├── qlearning/
-│   │   └── agent.py                  # Q-learning baseline
-│   ├── options/
-│   │   ├── agent.py                  # Hard-coded options training
-│   │   └── options.py                # Option classes
-│   ├── discovery/
-│   │   ├── agent.py                  # Discovery training loop
-│   │   ├── discovered_option.py      # Learned option class
-│   │   ├── option_discovery.py       # Discovery manager
-│   │   └── README.md                 # Discovery documentation
-│   ├── planning/
-│   │   ├── svi_planner.py           # SMDP value iteration
-│   │   ├── hallway_options.py       # Hallway option definitions
-│   │   └── README.md                # Planning documentation
-│   └── main.py                       # Main entry point
-├── tests/
-│   ├── test_smdp_backup.py          # SMDP correctness tests
-│   ├── plot_efficiency_metrics.py    # Planning visualizations
-│   └── plot_mixed_comparison.py      # Mixed planning comparison
-├── plots/                            # Generated visualizations
-├── results/                          # Training results
-├── pyproject.toml                    # Poetry configuration
-├── requirements.txt                  # Pip requirements
-└── README.md                         # This file
-```
-
 ## Results
 
 ### Learning Performance
@@ -331,6 +293,8 @@ options/
 - Options discover useful behavior earlier
 - Demonstrates efficiency of temporal abstraction
 
+---
+
 ## Key Insights
 
 1. **Temporal Abstraction Works**: Options dramatically improve both learning and planning
@@ -339,6 +303,7 @@ options/
 4. **SMDP Math is Crucial**: Proper discounting with fundamental matrix is essential
 5. **Mixed is Best**: Combining primitives + options gets benefits of both
 
+---
 
 ## References
 
