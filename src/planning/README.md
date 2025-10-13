@@ -100,42 +100,6 @@ print(f"Options: {iters_opt} iterations")
 print(f"Speedup: {iters_prim/iters_opt:.2f}x faster")
 ```
 
-## 📊 Experimental Results
-
-The planner demonstrates three key benefits of options over primitives:
-
-**1. Faster Convergence**
-- **Metric**: Value function error vs. iteration number
-- **Result**: Options converge in ~3-5x fewer sweeps than primitives
-- Most dramatic for goals far from start or across rooms
-
-**2. Better Computational Efficiency**  
-- **Metric**: Cumulative planning steps vs. value error (where one planning step = one $(s,o)$ backup)
-- **Result**: Options achieve lower error with fewer total backups
-- Better value propagation per update
-
-**3. Quicker Discovery of Useful Behavior**
-- **Metric**: $V(s_{\text{start}})$ vs. planning time
-- **Result**: Start state values improve faster with options
-- Agent learns good policies more quickly
-
-## 💡 Key Insights
-
-1. **Temporal Abstraction**: Options compress multi-step trajectories into single planning decisions
-
-2. **Faster Value Propagation**: SMDP backups propagate value across multiple states in one update
-
-3. **Reduced Planning Horizon**: Agent plans over fewer decision points to reach goal
-
-4. **Proper Discounting**: Fundamental matrix approach correctly handles $\gamma^\tau$ coupling with stochastic option duration
-
-5. **Mixed Planning Benefits**: Combining primitives + options gets benefits of both:
-   - Options for long-range navigation
-   - Primitives for local fine-tuning
-
 ## 📚 References
 
 - **Sutton, R. S., Precup, D., & Singh, S. (1999).** Between MDPs and semi-MDPs: A framework for temporal abstraction in reinforcement learning. *Artificial Intelligence*, 112(1-2), 181-211.
-
-- **Precup, D. (2000).** Temporal abstraction in reinforcement learning. PhD Thesis, University of Massachusetts Amherst.
-
